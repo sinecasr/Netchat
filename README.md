@@ -54,38 +54,36 @@ NetChat/
 
 ## Architecture
 
-NetChat uses a **client-server architecture**.
+NetChat follows a **client-server architecture**.
 
 ```text
-             ┌───────────────┐
-             │     Server    │
-             │               │
-             │ TCP Socket    │
-             │ Client Manager│
-             │ Logger        │
-             └───────┬───────┘
-                     │
-              TCP Connections
-          ┌──────────┼──────────┐
-          │          │          │
-          ▼          ▼          ▼
-       Client 1   Client 2   Client 3
-        Alice        Bob      Charlie
+             ┌──────────────────┐
+             │   NetChat Server │
+             │                  │
+             │  TCP Socket      │
+             │  Client Manager  │
+             │  Logger          │
+             └────────┬─────────┘
+                      │
+                 TCP Connections
+             ┌────────┼────────┐
+             │        │        │
+             ▼        ▼        ▼
+          Client 1 Client 2 Client 3
+           Alice      Bob    Charlie
 ```
 
-The server listens for incoming TCP connections. When a client connects, the server handles the client independently while continuing to accept other connections.
+The server listens for incoming TCP connections. Each connected client is handled independently, allowing multiple clients to communicate concurrently.
 
 ## Build
 
-Make sure GCC and pthread support are installed on Linux.
-
-Build the project using:
+Build the project using the provided Makefile:
 
 ```bash
 make
 ```
 
-Alternatively, the server can be compiled using:
+The server can also be compiled manually using GCC:
 
 ```bash
 gcc server/server.c server/client_manager.c server/logger.c common/protocol.c -o server/server -pthread
@@ -93,13 +91,13 @@ gcc server/server.c server/client_manager.c server/logger.c common/protocol.c -o
 
 ## Run
 
-### Start the server
+### Start the Server
 
 ```bash
 ./server/server
 ```
 
-### Start a client
+### Start the Client
 
 Open another terminal and run:
 
@@ -107,7 +105,7 @@ Open another terminal and run:
 ./client/client
 ```
 
-Connect multiple clients to test concurrent communication.
+Multiple clients can be started from separate terminals to test concurrent communication.
 
 ## Available Commands
 
@@ -121,31 +119,9 @@ Connect multiple clients to test concurrent communication.
 
 Normal text messages are sent as public messages to connected users.
 
-## Screenshots
-
-### Server
-
-![NetChat Server](screenshots/server.png)
-
-### Client Login
-
-![Client Login](screenshots/client-login.png)
-
-### Public Messaging
-
-![Public Messaging](screenshots/public-chat.png)
-
-### Private Messaging
-
-![Private Messaging](screenshots/private-message.png)
-
-### Multiple Clients
-
-![Multiple Clients](screenshots/multiple-clients.png)
-
 ## Protocol
 
-NetChat uses a custom application-layer message protocol to structure communication between the client and server.
+NetChat uses a **custom application-layer message protocol** for communication between clients and the server.
 
 The protocol handles:
 
@@ -157,7 +133,7 @@ The protocol handles:
 * Input validation
 * Message parsing
 
-Detailed protocol documentation is available in:
+Detailed protocol information is documented in:
 
 ```text
 docs/protocol.md
@@ -165,7 +141,7 @@ docs/protocol.md
 
 ## Documentation
 
-Additional project documentation:
+Additional documentation is available in the `docs/` directory:
 
 ```text
 docs/
@@ -175,16 +151,12 @@ docs/
 
 ## Testing
 
-The `tests/` directory contains project testing resources used to verify application functionality and communication behavior.
+The `tests/` directory contains testing resources used to verify application functionality and communication behavior.
 
 ## Future Improvements
 
-* Secure communication using TLS
+* TLS-based secure communication
 * Persistent chat history
-* Improved client-side UI
-* More comprehensive automated testing
+* Improved client interface
+* Expanded automated testing
 * File transfer support
-
-## Author
-
-Developed as a C/Linux networking project to demonstrate socket programming, concurrent client handling, TCP/IP communication, and protocol design.
